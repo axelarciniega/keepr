@@ -86,6 +86,17 @@ namespace keepr.Repositories
             return edit;
         }
 
+        internal void Delete(int keepId)
+        {
+            string sql = @"
+            DELETE FROM keeps WHERE id = @keepId
+            ;";
+            int rowsAffected = _db.Execute(sql, new { keepId });
+            if (rowsAffected > 1) throw new Exception("Deleted everything");
+            if (rowsAffected < 1) throw new Exception("Nothing got deleted");
+
+        }
+
 
 
 
