@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace keepr.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/keeps")]
     public class KeepsController : ControllerBase
     {
         private readonly KeepsService _keepsService;
@@ -18,5 +18,31 @@ namespace keepr.Controllers
             _keepsService = keepsService;
             _auth0 = auth;
         }
+
+
+        [Authorize]
+        [HttpPost]
+        public async Task<ActionResult<Keep>> CreateKeep([FromBody] Keep keepData)
+        {
+            try
+            {
+                Account userInfo = await _auth0.GetUserInfoAsync<Account>(HttpContext);
+                keepData.CreatorId = userInfo.Id;
+                Keep newKeep = _keepsService.CreateKeep(keepData);
+                return Ok(newKeep);
+
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+
+
+
+
+
+
     }
 }

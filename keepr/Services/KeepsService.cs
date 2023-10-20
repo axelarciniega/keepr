@@ -13,5 +13,12 @@ namespace keepr.Services
         {
             _repo = repo;
         }
+
+        internal Keep CreateKeep(Keep keepData)
+        {
+            return _repo.CreateKeep(keepData);
+        }
+
+
     }
 }
