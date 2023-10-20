@@ -36,6 +36,40 @@ namespace keepr.Controllers
             }
         }
 
+        [HttpGet("{vaultId}")]
+        public async Task<ActionResult<Vault>> GetById(int vaultId)
+        {
+            try
+            {
+                Account userInfo = await _auth0.GetUserInfoAsync<Account>(HttpContext);
+                //TODO bring in userInfo?.Id if needed here
+                Vault foundVault = _vaultsService.GetById(vaultId);
+                return Ok(foundVault);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [Authorize]
+        [HttpPut("{vaultId}")]
+        public async Task<ActionResult<Vault>> Edit([FromBody] Vault updateData, int vaultId)
+        {
+            try
+            {
+                Account userInfo = await _auth0.GetUserInfoAsync<Account>(HttpContext);
+                updateData.Id = vaultId;
+                Vault edited = _vaultsService.Edit(updateData, userInfo.Id);
+                return Ok(edited);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+
 
 
 

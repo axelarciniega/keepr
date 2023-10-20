@@ -37,5 +37,38 @@ namespace keepr.Repositories
             return newVault;
         }
 
+        internal Vault GetById(int vaultId)
+        {
+            string sql = @"
+            SELECT
+            vaults.*,
+            accounts.*
+            FROM vaults
+            JOIN accounts ON accounts.id = vaults.creatorId
+            WHERE vaults.id = @vaultId
+            ;";
+            Vault foundVault = _db.Query<Vault, Account, Vault>(sql, (vault, account) =>
+            {
+                vault.Creator = account;
+                return vault;
+            }, new { vaultId }).FirstOrDefault();
+            return foundVault;
+        }
+
+        internal Vault Edit(Vault updateData)
+        {
+            string sql = @"
+                UPDATE vaults
+                SET
+                name = @name,
+                description = @description,
+                img = @img,
+                isPrivate = @isPrivate
+                WHERE id = @id;
+            ;";
+            Vault edit = _db.Query<Vault>(sql, updateData).FirstOrDefault();
+            return edit;
+        }
+
     }
 }

@@ -19,6 +19,28 @@ namespace keepr.Services
             return _repo.CreateVault(vaultData);
         }
 
+        internal Vault GetById(int vaultId)
+        {
+            Vault foundVault = _repo.GetById(vaultId);
+            if (foundVault == null) throw new Exception($"invalid id at {vaultId}");
+            return foundVault;
+        }
+
+        internal Vault Edit(Vault updateData, string userInfo)
+        {
+            Vault original = this.GetById(updateData.Id);
+            if (original.CreatorId != userInfo) throw new Exception("unauthorized to edit");
+
+            original.Name = updateData.Name ?? original.Name;
+            original.Description = updateData.Description ?? original.Description;
+            original.Img = updateData.Img ?? original.Img;
+            original.IsPrivate = updateData.IsPrivate;
+
+            Vault vault = _repo.Edit(original);
+            return original;
+
+        }
+
 
 
 
