@@ -20,6 +20,33 @@ CREATE TABLE
         FOREIGN KEY (creatorId) REFERENCES accounts(Id) ON DELETE CASCADE
     ) default charset utf8 COMMENT '';
 
+CREATE TABLE
+    IF NOT EXISTS vaults(
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        name VARCHAR(255) NOT NULL,
+        description VARCHAR(500) NOT NULL,
+        img VARCHAR(1000) NOT NULL,
+        isPrivate BOOLEAN DEFAULT false,
+        creatorId VARCHAR(255) NOT NULL,
+        FOREIGN KEY (creatorId) REFERENCES accounts(id) ON DELETE CASCADE
+    ) default charset utf8 COMMENT '';
+
+INSERT INTO
+    vaults (
+        name,
+        description,
+        img,
+        isPrivate,
+        creatorId
+    )
+VALUES (
+        "Cool cars",
+        "saving all the cool cars",
+        "https://images.unsplash.com/photo-1566008885218-90abf9200ddb?auto=format&fit=crop&q=60&w=500&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fGNvb2wlMjBjYXJzfGVufDB8fDB8fHww",
+        true,
+        "6527182f925769ff6f109ae2"
+    )
+
 INSERT INTO
     keeps (
         name,
