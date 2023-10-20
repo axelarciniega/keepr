@@ -19,6 +19,20 @@ namespace keepr.Services
             return _repo.CreateKeep(keepData);
         }
 
+        internal List<Keep> GetKeeps(string userId)
+        {
+            List<Keep> keeps = _repo.GetKeeps();
+            keeps = keeps.FindAll(keep => keep.CreatorId == userId);
+            return keeps;
+        }
+
+        internal Keep GetById(int keepId)
+        {
+            Keep foundKeep = _repo.GetById(keepId);
+            if (foundKeep == null) throw new Exception($"Not a valid Id{keepId}");
+            return foundKeep;
+        }
+
 
     }
 }

@@ -37,6 +37,41 @@ namespace keepr.Repositories
             return newKeep;
         }
 
+        public List<Keep> GetKeeps()
+        {
+            string sql = @"
+            SELECT
+            keeps.*,
+            accounts.*
+            FROM keeps
+            JOIN accounts ON accounts.id = keeps.creatorId
+            ;";
+            List<Keep> keeps = _db.Query<Keep, Account, Keep>(sql, (keep, account) =>
+            {
+                keep.Creator = account;
+                return keep;
+            }).ToList();
+            return keeps;
+        }
+
+        public Keep GetById(int keepId)
+        {
+            string sql = @"
+            SELECT 
+            keeps.*,
+            accounts.*
+            FROM keeps
+            JOIN accounts ON accounts.id = keeps.creatorId
+            WHERE keeps.id = @keepId
+            ;";
+            Keep foundKeep = _db.Query<Keep, Account, Keep>(sql, (keep, account) =>
+            {
+                keep.Creator = account;
+                return keep;
+            }, new { keepId }).FirstOrDefault();
+            return foundKeep;
+        }
+
 
 
 

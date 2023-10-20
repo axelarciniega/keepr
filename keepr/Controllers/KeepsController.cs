@@ -38,6 +38,36 @@ namespace keepr.Controllers
             }
         }
 
+        [HttpGet]
+        public async Task<ActionResult<List<Keep>>> GetKeeps()
+        {
+            try
+            {
+                Account userInfo = await _auth0.GetUserInfoAsync<Account>(HttpContext);
+                List<Keep> keeps = _keepsService.GetKeeps(userInfo?.Id);
+                return Ok(keeps);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpGet("{keepId}")]
+        public async Task<ActionResult<Keep>> GetById(int keepId)
+        {
+            try
+            {
+                Account userInfo = await _auth0.GetUserInfoAsync<Account>(HttpContext);
+                Keep keep = _keepsService.GetById(keepId);
+                return Ok(keep);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
 
 
 
