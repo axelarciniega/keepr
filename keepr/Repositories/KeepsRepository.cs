@@ -72,6 +72,20 @@ namespace keepr.Repositories
             return foundKeep;
         }
 
+        public Keep Edit(Keep updateData)
+        {
+            string sql = @"
+            UPDATE keeps
+            SET
+            name = @name,
+            description = @description,
+            img = @img
+            WHERE id = @id;
+            ;";
+            Keep edit = _db.Query<Keep>(sql, updateData).FirstOrDefault();
+            return edit;
+        }
+
 
 
 

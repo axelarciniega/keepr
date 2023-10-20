@@ -33,6 +33,20 @@ namespace keepr.Services
             return foundKeep;
         }
 
+        internal Keep Edit(Keep updateData, string userInfo)
+        {
+            Keep original = this.GetById(updateData.Id);
+            if (original.CreatorId != userInfo) throw new Exception("unauthorized to edit");
+
+            original.Name = updateData.Name ?? original.Name;
+            original.Description = updateData.Description ?? original.Description;
+            original.Img = updateData.Img ?? original.Img;
+
+            Keep keep = _repo.Edit(original);
+            return original;
+
+        }
+
 
     }
 }
