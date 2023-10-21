@@ -70,5 +70,15 @@ namespace keepr.Repositories
             return edit;
         }
 
+        internal void DeleteVault(int vaultId)
+        {
+            string sql = @"
+            DELETE FROM vaults WHERE id = @vaultId
+            ;";
+            int rowsAffected = _db.Execute(sql, new { vaultId });
+            if (rowsAffected > 1) throw new Exception("Deleted everything");
+            if (rowsAffected < 1) throw new Exception("Nothing got deleted");
+        }
+
     }
 }
