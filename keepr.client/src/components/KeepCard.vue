@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-
+        <!-- STUB Keep Card -->
         <section class="row">
             <div @click="getKeepDetails()" class="col-12 col-md-5 relative" data-bs-toggle="modal" data-bs-target="#DetailModal">
                 <div class="img-s" :style="`background-image: url(${keep.img})`">
@@ -11,20 +11,56 @@
             </div>
         </section>
 
+
+        <!-- STUB modal -->
         <div class="modal fade" id="DetailModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div  class="modal-dialog">
+        <div  class="modal-dialog modal-xl">
             <div v-if="activeKeep" class="modal-content">
             <div class="modal-header">
                 <h1 class="modal-title fs-5" id="exampleModalLabel">{{ activeKeep.name }}</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                sup
+                <section class="row">
+                    <div class="col-12 col-md-6">
+                        <img class="activeImage" :src="activeKeep.img" alt="">
+                    </div>
+                    <div class="col-12 col-md-6 d-flex justify-content-between">
+                        <div class="row">
+                            <div class="col-6">
+                                <i class="mdi mdi-eye"></i> {{ activeKeep.views }}
+                            </div>
+                            <div class="col-6">
+                                <i class="mdi mdi-alpha-k-box"></i> {{ activeKeep.views }}
+                            </div>
+                            <div class="row">
+                                <div>
+                                    <h1 class="text-center">{{ activeKeep.name }}</h1>
+                                </div>
+                                <div>
+                                    <p class="text-center">{{ activeKeep.description }}</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6">
+                                    <button>Save to vault</button>
+                                </div>
+                                <div class="col-6">
+                                    <select name="vault-picker" id="vault-picker" class="form-control">
+                                        <option value="" disabled selected>select a vault</option>
+                                        <option v-for="keep in keepss" :key="keep.id" select="+keepss.id" value="keepss.id">{{ keepss.name }}</option>
+                                    </select>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </section>
             </div>
-            <div class="modal-footer">
+            <!-- <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
-            </div>
+                <button  type="button" class="btn btn-primary">Save changes</button>
+            </div> -->
             </div>
         </div>
         </div>
@@ -46,6 +82,7 @@ export default {
     props: {keep: {type: Keep, required: true}},
 setup(props) {
   return {
+    keepss: computed(()=> AppState.keeps),
     activeKeep: computed(()=> AppState.activeKeep),
     async getKeepDetails(){
         try {
@@ -63,6 +100,12 @@ setup(props) {
 
 
 <style lang="scss" scoped>
+
+    .activeImage{
+        width: 100%;
+        height: 100%;
+        border-radius: 10px;
+    }
 
     .relative{
         position: relative;
