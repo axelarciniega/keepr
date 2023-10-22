@@ -38,6 +38,38 @@ namespace keepr.Controllers
             }
         }
 
+        [HttpGet("{vaultKeepId}")]
+        public async Task<ActionResult<VaultKeep>> GetVaultKeep(int vaultKeepId)
+        {
+            try
+            {
+                Account userInfo = await _auth0.GetUserInfoAsync<Account>(HttpContext);
+                VaultKeep foundVaultKeep = _vaultKeepsService.GetVaultKeep(vaultKeepId);
+                return Ok(foundVaultKeep);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+
+            }
+        }
+
+        [Authorize]
+        [HttpDelete("{vaultKeepId}")]
+        public async Task<ActionResult<VaultKeep>> Delete(int vaultKeepId)
+        {
+            try
+            {
+                Account userInfo = await _auth0.GetUserInfoAsync<Account>(HttpContext);
+                string message = _vaultKeepsService.Delete(vaultKeepId, userInfo.Id);
+                return Ok(message);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
 
 
 

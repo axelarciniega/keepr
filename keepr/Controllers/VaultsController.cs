@@ -12,11 +12,13 @@ namespace keepr.Controllers
     {
         private readonly VaultsService _vaultsService;
         private readonly Auth0Provider _auth0;
+        private readonly VaultKeepsService _vaultKeepsService;
 
-        public VaultsController(VaultsService vaultsService, Auth0Provider auth0)
+        public VaultsController(VaultsService vaultsService, Auth0Provider auth0, VaultKeepsService vaultKeepsService)
         {
             _vaultsService = vaultsService;
             _auth0 = auth0;
+            _vaultKeepsService = vaultKeepsService;
         }
 
         [Authorize]
@@ -29,6 +31,20 @@ namespace keepr.Controllers
                 vaultData.CreatorId = userInfo.Id;
                 Vault newVault = _vaultsService.CreateVault(vaultData);
                 return Ok(newVault);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpGet("{vaultId}/keeps")]
+        public ActionResult<List<VaultKeep>> GetKeepsInVault(int vaultId)
+        {
+            try
+            {
+                List<VaultKeep> foundVaultKeep = _vaultKeepsService.GetKeepsInVault(vaultId);
+                return Ok(foundVaultKeep);
             }
             catch (Exception e)
             {

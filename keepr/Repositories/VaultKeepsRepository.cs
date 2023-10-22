@@ -36,5 +36,52 @@ namespace keepr.Repositories
             }, vaultData).FirstOrDefault();
             return newVaultKeep;
         }
+
+        internal List<VaultKeep> GetKeepsInVault(int vaultId)
+        {
+            string sql = @"
+                SELECT 
+                vaultkeeps.*,
+                accounts.* 
+                FROM vaultkeeps
+                JOIN accounts ON accounts.id = vaultkeeps.creatorId
+                WHERE vaultId = @vaultId
+            ;";
+            List<VaultKeep> foundVault = _db.Query<VaultKeep, Account, VaultKeep>(sql, (vaultkeep, account) =>
+            {
+                vaultkeep.Creator = account;
+                return vaultkeep;
+            }, new { vaultId }).ToList();
+            return foundVault;
+        }
+
+        internal VaultKeep GetVaultKeep(int vaultKeepId)
+        {
+            string sql = @"
+            SELECT
+            vaultkeeps.*,
+            accounts.*
+            FROM vaultkeeps
+            JOIN accounts ON accounts.id = vaultkeeps.creatorId
+            WHERE vaultkeeps.id = @vaultKeepId
+            ;";
+            VaultKeep foundVaultKeep = _db.Query<VaultKeep, Account, VaultKeep>(sql, (vaultkeep, account) =>
+            {
+                vaultkeep.Creator = account;
+                return vaultkeep;
+            }, new { vaultKeepId }).FirstOrDefault();
+            return foundVaultKeep;
+        }
+
+        internal void Delete(int vaultKeepId)
+        {
+            string sql = @"
+                DELETE FROM vaultkeeps WHERE id = @vaultKeepId
+            ;";
+            int rowsAffected = _db.Execute(sql, new { vaultKeepId });
+            if (rowsAffected > 1) throw new Exception("Deleted everything");
+            if (rowsAffected < 1) throw new Exception("Nothing was deleted");
+
+        }
     }
 }
