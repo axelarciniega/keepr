@@ -1,13 +1,36 @@
 <template>
-    <div class="container-fluid">
+    <div class="container">
 
-        <!-- <section class="row"> -->
-            <div class="col-12 col-md-5">
-                <div class="">
-                    <img class="img-s" :src="keep.img">
+        <section class="row">
+            <div @click="getKeepDetails()" class="col-12 col-md-5 relative" data-bs-toggle="modal" data-bs-target="#DetailModal">
+                <div class="img-s" :style="`background-image: url(${keep.img})`">
+                    <!-- <img class="img-s" :src="keep.img"> -->
+                    <p class="absolute">{{ keep.name }}</p>
+                    <img class="profile-pic " :src="keep.creator.picture" alt="">
                 </div>
             </div>
-        <!-- </section> -->
+        </section>
+
+        <div class="modal fade" id="DetailModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div  class="modal-dialog">
+            <div v-if="activeKeep" class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">{{ activeKeep.name }}</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                sup
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+            </div>
+        </div>
+        </div>
+
+
+
     </div>
     </template>
 
@@ -15,11 +38,24 @@
 import { computed } from 'vue';
 import { Keep } from '../models/Keep';
 import { AppState } from '../AppState';
+import Pop from '../utils/Pop';
+import { keepsService } from '../services/KeepsService';
+import { logger } from '../utils/Logger';
 
 export default {
     props: {keep: {type: Keep, required: true}},
-setup() {
+setup(props) {
   return {
+    activeKeep: computed(()=> AppState.activeKeep),
+    async getKeepDetails(){
+        try {
+            logger.log(props.keep.id)
+            const keepId = props.keep.id
+            await keepsService.getKeepDetails(keepId)
+        } catch (error) {
+            Pop.error(error)
+        }
+    }
   };
 },
 };
@@ -28,26 +64,69 @@ setup() {
 
 <style lang="scss" scoped>
 
+    .relative{
+        position: relative;
+    }
+
+    .absolute{
+        position: absolute;
+        top: 43vh;
+        left: 60px;
+        background-color: rgba(0, 0, 0, 0.255);
+        backdrop-filter: blur(20px);
+        min-width: 70px;
+        color:white;
+    }
+
+  
+    .profile-pic{
+        position: absolute;
+        left: 240px;
+        top: 40vh;
+        width: 8vh;
+        height: 8vhs;
+        border-radius: 50%;
+    }
+
 
 
     .img-s{
         border-radius: 15px;
-        object-fit: cover;
-        object-position: center;
+        background-position: center;
+        background-size: cover;
         width: 40vh;
-        height: 100%;
+        height: 50vh;
         $gap: 1.25em;
         column-gap: $gap;
         margin: $gap;
     }
+    .img-s:hover{
+        cursor: pointer;
+    }
 
     @media(max-width: 768px){
+       
+
+        .profile-pic{
+        position: absolute;
+        left: 5px;
+        top: 40vh;
+        width: 8vh;
+        height: 8vhs;
+        border-radius: 50%;
+        }
+
+        .absolute{
+            position: absolute;
+
+        }
+
         .img-s{
         border-radius: 15px;
-        object-fit: cover;
-        object-position: center;
-        width: 20vh;
-        height: 100%;
+        background-position: center;
+        background-size: cover;
+        width: 15vh;
+        height: 30vh;
         $gap: 1.25em;
         column-gap: $gap;
         margin: $gap;

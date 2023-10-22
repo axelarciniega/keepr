@@ -46,7 +46,7 @@ export default {
 
 .masonry-container{
     $gap: 1.25em;
-    columns: 3 200px;
+    columns: 4 200px;
     column-gap: 1rem;
 }
 
