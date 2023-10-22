@@ -1,9 +1,10 @@
 <template>
   <div class="container">
 
-
-    <div v-for="keep in keeps" :key="keep.id">
-      <KeepCard :keep="keep"/>
+    <div class="masonry-container">
+      <div v-for="keep in keeps" :key="keep.id">
+        <KeepCard :keep="keep"/>
+      </div>
     </div>
 
 
@@ -43,6 +44,12 @@ export default {
 
 <style scoped lang="scss">
 
+.masonry-container{
+    $gap: 1.25em;
+    columns: 3 200px;
+    column-gap: 1rem;
+}
+
 
 
 .home {
@@ -64,4 +71,14 @@ export default {
     }
   }
 }
+
+
+@media(max-width: 768px){
+  .masonry-container{
+     $gap: 1.25em;
+    columns: 2 100px;
+    column-gap: $gap;
+  }
+}
+
 </style>

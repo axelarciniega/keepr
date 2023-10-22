@@ -3,8 +3,8 @@
 
         <!-- <section class="row"> -->
             <div class="col-12 col-md-5">
-                <div class="masonry-container">
-                    <img :src="keep.img">
+                <div class="">
+                    <img class="img-s" :src="keep.img">
                 </div>
             </div>
         <!-- </section> -->
@@ -29,17 +29,30 @@ setup() {
 <style lang="scss" scoped>
 
 
-.masonry-container{
-    $gap: 1.25em;
-    display: grid;
-    columns: 4 400px;
-    column-gap: 1rem;
-    img{
-        border: 10px;
-        width: 100%;
-        margin-bottom: $gap;
+
+    .img-s{
+        border-radius: 15px;
+        object-fit: cover;
+        object-position: center;
+        width: 40vh;
+        height: 100%;
+        $gap: 1.25em;
+        column-gap: $gap;
+        margin: $gap;
     }
-}
+
+    @media(max-width: 768px){
+        .img-s{
+        border-radius: 15px;
+        object-fit: cover;
+        object-position: center;
+        width: 20vh;
+        height: 100%;
+        $gap: 1.25em;
+        column-gap: $gap;
+        margin: $gap;
+        }
+    }
 
 
 </style>
