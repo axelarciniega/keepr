@@ -22,7 +22,7 @@ namespace keepr.Services
         internal List<Keep> GetKeeps(string userId)
         {
             List<Keep> keeps = _repo.GetKeeps();
-            keeps = keeps.FindAll(keep => keep.CreatorId == userId);
+
             return keeps;
         }
 
@@ -57,6 +57,7 @@ namespace keepr.Services
         {
             Keep foundKeep = this.GetById(keepId);
             _repo.Delete(keepId);
+            if (foundKeep == null) throw new Exception("undefined");
             if (foundKeep.CreatorId != userInfo) throw new Exception("unauthorized to delete");
             return $"{foundKeep.Name} was removed";
         }

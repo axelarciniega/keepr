@@ -16,11 +16,17 @@ namespace keepr.Services
             _vaultsService = vaultsService;
         }
 
-        internal VaultKeep Create(VaultKeep vaultData, string userInfo)
+        internal VaultKeep Create(VaultKeep vaultData)
         {
 
             VaultKeep newVaultKeep = _repo.Create(vaultData);
-            if (newVaultKeep.CreatorId != userInfo) throw new Exception("Unauthorized");
+
+            Vault vault = _vaultsService.GetById(vaultData.VaultId, vaultData.CreatorId);
+
+            if (vault.CreatorId != vaultData.CreatorId) throw new Exception("Unauthorized");
+
+
+
             return newVaultKeep;
         }
 

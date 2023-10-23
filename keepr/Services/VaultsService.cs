@@ -36,9 +36,10 @@ namespace keepr.Services
         }
 
         // STUB this one starts from the profile controller
-        internal List<Vault> GetProfileVaults(string profileId)
+        internal List<Vault> GetProfileVaults(string profileId, string userId)
         {
             List<Vault> vaults = _repo.GetProfileVaults(profileId);
+            vaults = vaults.FindAll(vault => vault.IsPrivate == false || vault.CreatorId == userId);
             return vaults;
         }
 
