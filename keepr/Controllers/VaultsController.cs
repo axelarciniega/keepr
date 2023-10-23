@@ -28,8 +28,7 @@ namespace keepr.Controllers
             try
             {
                 Account userInfo = await _auth0.GetUserInfoAsync<Account>(HttpContext);
-                vaultData.CreatorId = userInfo.Id;
-                Vault newVault = _vaultsService.CreateVault(vaultData);
+                Vault newVault = _vaultsService.CreateVault(vaultData, userInfo?.Id);
                 return Ok(newVault);
             }
             catch (Exception e)
@@ -76,7 +75,7 @@ namespace keepr.Controllers
             {
                 Account userInfo = await _auth0.GetUserInfoAsync<Account>(HttpContext);
                 updateData.Id = vaultId;
-                Vault edited = _vaultsService.Edit(updateData, userInfo.Id);
+                Vault edited = _vaultsService.Edit(updateData, userInfo?.Id);
                 return Ok(edited);
             }
             catch (Exception e)
@@ -87,12 +86,12 @@ namespace keepr.Controllers
 
         [Authorize]
         [HttpDelete("{vaultId}")]
-        public async Task<ActionResult<Vault>> DeleteVault(int vaultId)
+        public async Task<ActionResult<string>> DeleteVault(int vaultId)
         {
             try
             {
                 Account userInfo = await _auth0.GetUserInfoAsync<Account>(HttpContext);
-                string message = _vaultsService.DeleteVault(vaultId, userInfo.Id);
+                string message = _vaultsService.DeleteVault(vaultId, userInfo?.Id);
                 return Ok(message);
             }
             catch (Exception e)

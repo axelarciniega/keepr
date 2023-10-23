@@ -14,7 +14,7 @@ namespace keepr.Repositories
             _db = db;
         }
 
-        public Keep CreateKeep(Keep keepData)
+        internal Keep CreateKeep(Keep keepData)
         {
             string sql = @"
         INSERT INTO keeps
@@ -37,7 +37,7 @@ namespace keepr.Repositories
             return newKeep;
         }
 
-        public List<Keep> GetKeeps()
+        internal List<Keep> GetKeeps()
         {
             string sql = @"
             SELECT
@@ -72,7 +72,7 @@ namespace keepr.Repositories
             return keeps;
         }
 
-        public Keep GetById(int keepId)
+        internal Keep GetById(int keepId)
         {
             string sql = @"
             SELECT 
@@ -90,7 +90,7 @@ namespace keepr.Repositories
             return foundKeep;
         }
 
-        public Keep Edit(Keep updateData)
+        internal Keep Edit(Keep updateData)
         {
             string sql = @"
             UPDATE keeps

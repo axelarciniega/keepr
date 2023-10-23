@@ -16,9 +16,12 @@ namespace keepr.Services
             _vaultsService = vaultsService;
         }
 
-        internal VaultKeep Create(VaultKeep vaultData)
+        internal VaultKeep Create(VaultKeep vaultData, string userInfo)
         {
-            return _repo.Create(vaultData);
+
+            VaultKeep newVaultKeep = _repo.Create(vaultData);
+            if (newVaultKeep.CreatorId != userInfo) throw new Exception("Unauthorized");
+            return newVaultKeep;
         }
 
         internal List<KeepModelView> GetKeepsInVault(int vaultId, string userInfo)

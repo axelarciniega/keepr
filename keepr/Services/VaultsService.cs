@@ -14,9 +14,11 @@ namespace keepr.Services
             _repo = repo;
         }
 
-        internal Vault CreateVault(Vault vaultData)
+        internal Vault CreateVault(Vault vaultData, string userInfo)
         {
-            return _repo.CreateVault(vaultData);
+            Vault newVault = _repo.CreateVault(vaultData);
+            if (newVault.CreatorId != userInfo) throw new Exception("Unauthorized");
+            return newVault;
         }
 
         internal Vault GetById(int vaultId, string userInfo)
@@ -30,9 +32,14 @@ namespace keepr.Services
         internal List<Vault> GetVaultsAccount(string userInfo)
         {
             List<Vault> vault = _repo.GetVaultsAccount(userInfo);
-            // NOTE Bring in this in later
-            // if (vault.CreatorId != userInfo) throw new Exception("Unauthorized");
             return vault;
+        }
+
+        // STUB this one starts from the profile controller
+        internal List<Vault> GetProfileVaults(string profileId)
+        {
+            List<Vault> vaults = _repo.GetProfileVaults(profileId);
+            return vaults;
         }
 
 
