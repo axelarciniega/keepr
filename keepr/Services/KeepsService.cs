@@ -32,34 +32,44 @@ namespace keepr.Services
             return keeps;
         }
 
-        internal Keep GetById(int keepId)
+        internal Keep GetById(int keepId, string userInfo, bool IncreaseVisits = false)
         {
             Keep foundKeep = _repo.GetById(keepId);
             if (foundKeep == null) throw new Exception($"Not a valid Id{keepId}");
+            if (IncreaseVisits && foundKeep.CreatorId != userInfo)
+            {
+                this.IncreaseVisits(foundKeep);
+            }
             return foundKeep;
         }
 
         internal Keep Edit(Keep updateData, string userInfo)
         {
-            Keep original = this.GetById(updateData.Id);
+            Keep original = this.GetById(updateData.Id, userInfo);
             if (original.CreatorId != userInfo) throw new Exception("unauthorized to edit");
 
             original.Name = updateData.Name ?? original.Name;
             original.Description = updateData.Description ?? original.Description;
             original.Img = updateData.Img ?? original.Img;
 
-            Keep keep = _repo.Edit(original);
+            _repo.Update(original);
             return original;
 
         }
 
         internal string Delete(int keepId, string userInfo)
         {
-            Keep foundKeep = this.GetById(keepId);
+            Keep foundKeep = this.GetById(keepId, userInfo);
             _repo.Delete(keepId);
             if (foundKeep == null) throw new Exception("undefined");
             if (foundKeep.CreatorId != userInfo) throw new Exception("unauthorized to delete");
             return $"{foundKeep.Name} was removed";
+        }
+
+        internal void IncreaseVisits(Keep keep)
+        {
+            keep.Views++;
+            _repo.Update(keep);
         }
 
 

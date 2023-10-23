@@ -77,8 +77,10 @@ namespace keepr.Repositories
             string sql = @"
             SELECT 
             keeps.*,
+            COUNT(vaultkeeps.id) AS kept,
             accounts.*
             FROM keeps
+            LEFT JOIN vaultkeeps on vaultkeeps.keepId = keeps.id
             JOIN accounts ON accounts.id = keeps.creatorId
             WHERE keeps.id = @keepId
             ;";
@@ -90,18 +92,18 @@ namespace keepr.Repositories
             return foundKeep;
         }
 
-        internal Keep Edit(Keep updateData)
+        internal void Update(Keep updateData)
         {
             string sql = @"
             UPDATE keeps
             SET
             name = @name,
             description = @description,
-            img = @img
+            img = @img,
+            views = @views
             WHERE id = @id;
             ;";
-            Keep edit = _db.Query<Keep>(sql, updateData).FirstOrDefault();
-            return edit;
+            _db.Execute(sql, updateData);
         }
 
         internal void Delete(int keepId)
