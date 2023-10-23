@@ -26,7 +26,7 @@ namespace keepr.Controllers
             try
             {
                 Account userInfo = await _auth0.GetUserInfoAsync<Account>(HttpContext);
-
+                vaultKeepData.CreatorId = userInfo.Id;
                 VaultKeep newVaultKeep = _vaultKeepsService.Create(vaultKeepData, userInfo?.Id);
                 return Ok(newVaultKeep);
             }
@@ -54,7 +54,7 @@ namespace keepr.Controllers
 
         [Authorize]
         [HttpDelete("{vaultKeepId}")]
-        public async Task<ActionResult<VaultKeep>> Delete(int vaultKeepId)
+        public async Task<ActionResult<string>> Delete(int vaultKeepId)
         {
             try
             {

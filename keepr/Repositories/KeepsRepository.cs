@@ -37,7 +37,7 @@ namespace keepr.Repositories
             return newKeep;
         }
 
-        internal List<Keep> GetKeeps()
+        public List<Keep> GetKeeps()
         {
             string sql = @"
             SELECT

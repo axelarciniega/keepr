@@ -28,6 +28,7 @@ namespace keepr.Controllers
             try
             {
                 Account userInfo = await _auth0.GetUserInfoAsync<Account>(HttpContext);
+                vaultData.CreatorId = userInfo.Id;
                 Vault newVault = _vaultsService.CreateVault(vaultData, userInfo?.Id);
                 return Ok(newVault);
             }
@@ -75,7 +76,7 @@ namespace keepr.Controllers
             {
                 Account userInfo = await _auth0.GetUserInfoAsync<Account>(HttpContext);
                 updateData.Id = vaultId;
-                Vault edited = _vaultsService.Edit(updateData, userInfo?.Id);
+                Vault edited = _vaultsService.Edit(updateData, userInfo.Id);
                 return Ok(edited);
             }
             catch (Exception e)
