@@ -39,11 +39,12 @@ namespace keepr.Controllers
         }
 
         [HttpGet("{vaultId}/keeps")]
-        public ActionResult<List<VaultKeep>> GetKeepsInVault(int vaultId)
+        public async Task<ActionResult<List<KeepModelView>>> GetKeepsInVault(int vaultId)
         {
             try
             {
-                List<VaultKeep> foundVaultKeep = _vaultKeepsService.GetKeepsInVault(vaultId);
+                Account userInfo = await _auth0.GetUserInfoAsync<Account>(HttpContext);
+                List<KeepModelView> foundVaultKeep = _vaultKeepsService.GetKeepsInVault(vaultId, userInfo?.Id);
                 return Ok(foundVaultKeep);
             }
             catch (Exception e)
@@ -58,8 +59,7 @@ namespace keepr.Controllers
             try
             {
                 Account userInfo = await _auth0.GetUserInfoAsync<Account>(HttpContext);
-                //TODO bring in userInfo?.Id if needed here
-                Vault foundVault = _vaultsService.GetById(vaultId);
+                Vault foundVault = _vaultsService.GetById(vaultId, userInfo?.Id);
                 return Ok(foundVault);
             }
             catch (Exception e)

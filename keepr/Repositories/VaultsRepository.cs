@@ -55,6 +55,18 @@ namespace keepr.Repositories
             return foundVault;
         }
 
+        internal List<Vault> GetVaultsAccount(string userId)
+        {
+            string sql = @"
+            SELECT 
+            *
+            FROM vaults
+            WHERE creatorId = @userId
+            ;";
+            List<Vault> vault = _db.Query<Vault>(sql, new { userId }).ToList();
+            return vault;
+        }
+
         internal Vault Edit(Vault updateData)
         {
             string sql = @"

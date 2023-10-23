@@ -19,16 +19,26 @@ namespace keepr.Services
             return _repo.CreateVault(vaultData);
         }
 
-        internal Vault GetById(int vaultId)
+        internal Vault GetById(int vaultId, string userInfo)
         {
             Vault foundVault = _repo.GetById(vaultId);
             if (foundVault == null) throw new Exception($"invalid id at {vaultId}");
+            if (foundVault.IsPrivate == true && foundVault.CreatorId != userInfo) throw new Exception("this vault is private");
             return foundVault;
         }
 
+        internal List<Vault> GetVaultsAccount(string userInfo)
+        {
+            List<Vault> vault = _repo.GetVaultsAccount(userInfo);
+            // NOTE Bring in this in later
+            // if (vault.CreatorId != userInfo) throw new Exception("Unauthorized");
+            return vault;
+        }
+
+
         internal Vault Edit(Vault updateData, string userInfo)
         {
-            Vault original = this.GetById(updateData.Id);
+            Vault original = this.GetById(updateData.Id, userInfo);
             if (original.CreatorId != userInfo) throw new Exception("unauthorized to edit");
 
             original.Name = updateData.Name ?? original.Name;
@@ -43,7 +53,7 @@ namespace keepr.Services
 
         internal string DeleteVault(int vaultId, string userInfo)
         {
-            Vault foundVault = this.GetById(vaultId);
+            Vault foundVault = this.GetById(vaultId, userInfo);
             _repo.DeleteVault(vaultId);
             if (foundVault.CreatorId != userInfo) throw new Exception("Unauthorized");
             return $"{foundVault.Name} was removed";

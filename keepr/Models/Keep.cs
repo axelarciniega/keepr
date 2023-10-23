@@ -13,3 +13,8 @@ public class Keep
     public int Kept { get; set; }
     public Account Creator { get; set; }
 }
+
+public class KeepModelView : Keep
+{
+    public int vaultKeepId { get; set; }
+}
