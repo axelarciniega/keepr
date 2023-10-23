@@ -26,6 +26,12 @@ namespace keepr.Services
             return keeps;
         }
 
+        internal List<Keep> GetProfileKeeps(string profileId)
+        {
+            List<Keep> keeps = _repo.GetProfileKeeps(profileId);
+            return keeps;
+        }
+
         internal Keep GetById(int keepId)
         {
             Keep foundKeep = _repo.GetById(keepId);
