@@ -106,7 +106,7 @@ namespace keepr.Repositories
             _db.Execute(sql, updateData);
         }
 
-        internal void Delete(int keepId)
+        internal void DeleteKeep(int keepId)
         {
             string sql = @"
             DELETE FROM keeps WHERE id = @keepId
@@ -114,7 +114,6 @@ namespace keepr.Repositories
             int rowsAffected = _db.Execute(sql, new { keepId });
             if (rowsAffected > 1) throw new Exception("Deleted everything");
             if (rowsAffected < 1) throw new Exception("Nothing got deleted");
-
         }
 
 

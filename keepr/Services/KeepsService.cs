@@ -57,11 +57,10 @@ namespace keepr.Services
 
         }
 
-        internal string Delete(int keepId, string userInfo)
+        internal string DeleteKeep(int keepId, string userInfo)
         {
             Keep foundKeep = this.GetById(keepId, userInfo);
-            _repo.Delete(keepId);
-            if (foundKeep == null) throw new Exception("undefined");
+            _repo.DeleteKeep(keepId);
             if (foundKeep.CreatorId != userInfo) throw new Exception("unauthorized to delete");
             return $"{foundKeep.Name} was removed";
         }
