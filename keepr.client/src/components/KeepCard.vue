@@ -1,15 +1,19 @@
 <template>
-    <div class="container">
+    <!-- <div class="container"> -->
         <!-- STUB Keep Card -->
-        <section class="row">
-            <div @click="getKeepDetails()" class="col-12 col-md-5 relative" data-bs-toggle="modal" data-bs-target="#DetailModal">
-                <div class="img-s" :style="`background-image: url(${keep.img})`">
+        <!-- <section class="row"> -->
+            <div @click="getKeepDetails()" class="position-relative" data-bs-toggle="modal" data-bs-target="#DetailModal">
+                <!-- <div class="img-s" :style="`background-image: url(${keep.img})`"> -->
+                    <img class="img-s" :src="keep.img" alt="">
                     <!-- <img class="img-s" :src="keep.img"> -->
-                    <p class="absolute">{{ keep.name }}</p>
-                    <img class="profile-pic " :src="keep.creator.picture" alt="">
-                </div>
+                    <div class="justify-content-between d-flex keep-details">
+
+                        <p class=" col-5 col-md-5 absolute text-center m-3">{{ keep.name }}</p>
+                        <img class="profile-pic col-12 col-md-4" :src="keep.creator.picture" alt="">
+                    </div>
+                <!-- </div> -->
             </div>
-        </section>
+        <!-- </section> -->
 
 
         <!-- STUB modal -->
@@ -67,7 +71,7 @@
 
 
 
-    </div>
+    <!-- </div> -->
     </template>
 
 <script>
@@ -107,41 +111,40 @@ setup(props) {
         border-radius: 10px;
     }
 
-    .relative{
-        position: relative;
-    }
+   
 
     .absolute{
-        position: absolute;
-        top: 43vh;
-        left: 60px;
+        border-radius: px;
         background-color: rgba(0, 0, 0, 0.255);
         backdrop-filter: blur(20px);
-        min-width: 70px;
         color:white;
     }
 
   
     .profile-pic{
-        position: absolute;
-        left: 240px;
-        top: 40vh;
+        
+     
         width: 8vh;
         height: 8vhs;
         border-radius: 50%;
     }
 
 
-
+.keep-details{
+    position: absolute;
+    bottom: 40px;
+    width: 100%;
+    padding-right: 10px;
+    padding-bottom: 20px;
+}
     .img-s{
         border-radius: 15px;
-        background-position: center;
-        background-size: cover;
-        width: 40vh;
-        height: 50vh;
-        $gap: 1.25em;
+        object-fit: cover;
+        object-position: center;
+        width: 100%;
+        $gap: 10px;
         column-gap: $gap;
-        margin: $gap;
+        margin-bottom: 30px;
     }
     .img-s:hover{
         cursor: pointer;
@@ -151,28 +154,26 @@ setup(props) {
        
 
         .profile-pic{
-        position: absolute;
-        left: 5px;
-        top: 40vh;
-        width: 8vh;
-        height: 8vhs;
-        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        border-radius: 50px;
+        margin: 8px;
         }
 
-        .absolute{
-            position: absolute;
+.keep-details{
+    position: absolute;
+}
 
-        }
+      
 
         .img-s{
         border-radius: 15px;
-        background-position: center;
-        background-size: cover;
-        width: 15vh;
+        object-fit: cover;
+        object-position: center;
+        width: 100%;
         height: 30vh;
         $gap: 1.25em;
-        column-gap: $gap;
-        margin: $gap;
+        margin-bottom: 30px;
         }
     }
 
