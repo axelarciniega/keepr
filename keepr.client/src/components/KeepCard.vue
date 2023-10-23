@@ -31,7 +31,7 @@
                                 <i class="mdi mdi-eye"></i> {{ activeKeep.views }}
                             </div>
                             <div class="col-6">
-                                <i class="mdi mdi-alpha-k-box"></i> {{ activeKeep.views }}
+                                <i class="mdi mdi-alpha-k-box"></i> {{ activeKeep.kept }}
                             </div>
                             <div class="row">
                                 <div>

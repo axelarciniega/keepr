@@ -59,7 +59,7 @@ namespace keepr.Controllers
             try
             {
                 Account userInfo = await _auth0.GetUserInfoAsync<Account>(HttpContext);
-                Keep keep = _keepsService.GetById(keepId, userInfo.Id, true);
+                Keep keep = _keepsService.GetById(keepId, userInfo?.Id, true);
                 return Ok(keep);
             }
             catch (Exception e)

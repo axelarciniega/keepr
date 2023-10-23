@@ -32,11 +32,11 @@ namespace keepr.Services
             return keeps;
         }
 
-        internal Keep GetById(int keepId, string userInfo, bool IncreaseVisits = false)
+        internal Keep GetById(int keepId, string userInfo, bool increaseVisits = false)
         {
             Keep foundKeep = _repo.GetById(keepId);
             if (foundKeep == null) throw new Exception($"Not a valid Id{keepId}");
-            if (IncreaseVisits && foundKeep.CreatorId != userInfo)
+            if (increaseVisits && foundKeep.CreatorId != userInfo)
             {
                 this.IncreaseVisits(foundKeep);
             }
