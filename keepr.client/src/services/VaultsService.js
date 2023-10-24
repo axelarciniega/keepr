@@ -22,7 +22,7 @@ class VaultsService{
     }
 
     async vaultProfile(profileId){
-        const res = await api.get(`api/profiles/vaults/${profileId}`)
+        const res = await api.get(`api/profiles/${profileId}/vaults`)
         AppState.vaults = res.data.map(v => new Vault(v))
     }
 

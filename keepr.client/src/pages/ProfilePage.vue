@@ -12,7 +12,7 @@
               <img class="profile-pic " :src="profile.picture" :alt="profile.name">
             </div>
             <h1 class="text-center">{{ profile.name }}</h1>
-            <h5>Vaults </h5>
+            <i class="text-center">{{ keeps.length }} Keeps | {{ vaults.length }} Vaults  </i>
           </section>
           
           
@@ -26,6 +26,8 @@ import Pop from '../utils/Pop';
 import { profilesService } from '../services/ProfilesService';
 import { computed, watchEffect } from 'vue';
 import { AppState } from '../AppState';
+import { keepsService } from '../services/KeepsService';
+import { vaultsService } from '../services/VaultsService';
 
 
 export default {
@@ -34,7 +36,27 @@ setup() {
 
   watchEffect(() => {
     getProfileById();
+    keepProfiles();
+    vaultProfile();
   })
+
+  async function keepProfiles(){
+    try {
+      const profileId = route.params.profileId
+      await keepsService.keepProfile(profileId)
+    } catch (error) {
+      Pop.error(error)
+    }
+  }
+
+  async function vaultProfile(){
+    try {
+      const profileId = route.params.profileId
+      await vaultsService.vaultProfile(profileId)
+    } catch (error) {
+      Pop.error(error);
+    }
+  }
 
   async function getProfileById(){
     try {
@@ -45,7 +67,9 @@ setup() {
     }
   }
   return {
-    profile: computed(() => AppState.activeProfile)
+    profile: computed(() => AppState.activeProfile),
+    keeps: computed(() => AppState.keeps),
+    vaults: computed(() => AppState.vaults)
   };
 },
 };
@@ -69,7 +93,12 @@ setup() {
 }
 
 @media(max-width: 768px){
- 
+ .coverImage{
+   background-position: center;
+  background-size: cover;
+  width: 90vw;
+  height: 20vh;
+ }
 }
 
 </style>
