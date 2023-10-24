@@ -52,11 +52,14 @@
                                 <div class="col-6">
                                     <select name="vault-picker" id="vault-picker" class="form-control">
                                         <option value="" disabled selected>select a vault</option>
-                                        <option v-for="keep in keepss" :key="keep.id" select="+keepss.id" value="keepss.id">{{ keepss.name }}</option>
+                                        <option v-for="keep in keepss" :key="keep.id" select="+keepss.id" value="keepss.id">{{ keep.name }}</option>
                                     </select>
                                 </div>
                                 <div >
                                     <img @click="goToAccount" class="profile-pic selectable" :src="activeKeep.creatorPic" alt="">
+                                    <div class="pt-2" v-if="account.id == activeKeep.creatorId">
+                                        <button @click="removeKeep(activeKeep.id)">Remove Keep</button>
+                                    </div>
                                 </div>
 
                             </div>
@@ -84,16 +87,18 @@ import { AppState } from '../AppState';
 import Pop from '../utils/Pop';
 import { keepsService } from '../services/KeepsService';
 import { logger } from '../utils/Logger';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { Modal } from 'bootstrap';
 
 export default {
     props: {keep: {type: Keep, required: true}},
 setup(props) {
     const router = useRouter({})
+    const route = useRoute({})
   return {
     keepss: computed(()=> AppState.keeps),
     activeKeep: computed(()=> AppState.activeKeep),
+    account: computed(() => AppState.account),
     async getKeepDetails(){
         try {
             logger.log(props.keep.id)
@@ -103,6 +108,19 @@ setup(props) {
             Pop.error(error)
         }
     },
+
+    async removeKeep(keepId){
+        try {
+            if(await Pop.confirm()){
+                await keepsService.removeKeep(keepId)
+                Modal.getOrCreateInstance('#DetailModal').hide();
+            }
+            Pop.success('Deleted Keep')
+        } catch (error) {
+            Pop.error(error);
+        }
+    },
+
     async goToAccount(){
         try {
             router.push({name: 'Profile', params: {profileId: AppState.activeKeep.creatorId}})
