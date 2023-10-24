@@ -10,5 +10,6 @@ export class Keep{
         this.creatorId = data.creatorId
         this.kept = data.kept
         this.creator = data.creator
+        this.creatorPic = data.creator.picture
     }
 }

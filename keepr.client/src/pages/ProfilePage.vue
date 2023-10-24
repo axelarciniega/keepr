@@ -1,6 +1,6 @@
 <template>
-    <div class="container">
-      <div v-if="profile">
+    <div v-if="profile" class="container">
+      <div >
         <section class="row">
           <div class="mt-3 justify-content-center d-flex">
             <img class="coverImage" :src="profile.coverImage" :alt="profile.name">
@@ -28,13 +28,10 @@
             </div>
           </section>
 
-          <section class="row mt-4">
+          <section class="masonry-container">
             <h3>Keeps</h3>
-            <div class="col-3 col-md-2 m-1" v-for="k in keeps" :key="k.id">
-              <div class="position-relative">
-                  <img class="imgBack" :src="k.img" :alt="k.name">
-                  <p class="absoluteImg">{{ k.name }}</p>
-                </div>
+            <div class="" v-for="k in keeps" :key="k.id">
+              <KeepCard :keep="k"/>
             </div>
           </section>
           
@@ -47,16 +44,21 @@
 import { useRoute, useRouter } from 'vue-router';
 import Pop from '../utils/Pop';
 import { profilesService } from '../services/ProfilesService';
-import { computed, watchEffect } from 'vue';
+import { computed, onUnmounted, watchEffect } from 'vue';
 import { AppState } from '../AppState';
 import { keepsService } from '../services/KeepsService';
 import { vaultsService } from '../services/VaultsService';
+import { clearService } from '../services/ClearService';
 
 
 export default {
 setup() {
   const route = useRoute({});
   const router = useRouter({})
+
+  onUnmounted(()=> {
+    clearAppstate();
+  })
 
   watchEffect(() => {
     getProfileById();
@@ -90,6 +92,15 @@ setup() {
       Pop.error(error)
     }
   }
+
+  function clearAppstate(){
+    try {
+      clearService.clearAppstate()
+    } catch (error) {
+      Pop.error(error);
+    }
+  }
+
   return {
     profile: computed(() => AppState.activeProfile),
     keeps: computed(() => AppState.keeps),
@@ -101,6 +112,12 @@ setup() {
 
 
 <style>
+
+.masonry-container{
+  columns: 4 200px;
+  width: 100%;
+  column-gap: 10px;
+}
 
 .absoluteImg{
   position: absolute;

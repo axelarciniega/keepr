@@ -55,10 +55,8 @@
                                         <option v-for="keep in keepss" :key="keep.id" select="+keepss.id" value="keepss.id">{{ keepss.name }}</option>
                                     </select>
                                 </div>
-                                <div>
-
-                                    <img @click="goToAccount" class="profile-pic selectable" :src="activeKeep.creator.picture" alt="">
-
+                                <div >
+                                    <img @click="goToAccount" class="profile-pic selectable" :src="activeKeep.creatorPic" alt="">
                                 </div>
 
                             </div>
@@ -131,9 +129,9 @@ setup(props) {
 
     .absolute{
         border-radius: px;
-        background-color: rgba(0, 0, 0, 0.255);
         backdrop-filter: blur(20px);
         color:white;
+        max-height: 30px;
     }
 
   

@@ -48,6 +48,7 @@ export default {
 
 .masonry-container{
     columns: 4 150px;
+    column-gap: 40px;
 // padding: 5em;
 }
 
