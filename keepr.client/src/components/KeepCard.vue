@@ -9,7 +9,7 @@
                     <div class="justify-content-between d-flex keep-details">
 
                         <p class=" col-5 col-md-5 absolute text-center m-3">{{ keep.name }}</p>
-                        <img class="profile-pic col-12 col-md-4" :src="keep.creator.picture" alt="">
+                            <img class="profile-pic col-12 col-md-4" :src="keep.creator.picture" alt="">
                     </div>
                 <!-- </div> -->
             </div>
@@ -54,6 +54,13 @@
                                         <option value="" disabled selected>select a vault</option>
                                         <option v-for="keep in keepss" :key="keep.id" select="+keepss.id" value="keepss.id">{{ keepss.name }}</option>
                                     </select>
+                                </div>
+                                <div>
+                        <router-link :to="{name: 'Profile', params: {profileId: keep.creatorId}}">
+
+                                    <img class="profile-pic" :src="activeKeep.creator.picture" alt="">
+                        </router-link>
+
                                 </div>
 
                             </div>
