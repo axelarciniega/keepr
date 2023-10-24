@@ -14,6 +14,29 @@
             <h1 class="text-center">{{ profile.name }}</h1>
             <i class="text-center">{{ keeps.length }} Keeps | {{ vaults.length }} Vaults  </i>
           </section>
+
+          <section class="row mt-4">
+            <h3>Vaults</h3>
+            <div class="col-3 col-md-2 m-1 " v-for="v in vaults" :key="v.id">
+                <router-link :to="{name: 'Vault', params: {vaultId: v.id}}">
+                  <div class="position-relative">
+                    <img class="imgBack" :src="v.img" alt="">
+                    <i v-if="v.isPrivate == true" class="mdi mdi-lock locker"></i>
+                    <p class="absoluteImg">{{ v.name }}</p>
+                  </div>
+                </router-link>
+            </div>
+          </section>
+
+          <section class="row mt-4">
+            <h3>Keeps</h3>
+            <div class="col-3 col-md-2 m-1" v-for="k in keeps" :key="k.id">
+              <div class="position-relative">
+                  <img class="imgBack" :src="k.img" :alt="k.name">
+                  <p class="absoluteImg">{{ k.name }}</p>
+                </div>
+            </div>
+          </section>
           
           
       </div>
@@ -21,7 +44,7 @@
 </template>
 
 <script>
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import Pop from '../utils/Pop';
 import { profilesService } from '../services/ProfilesService';
 import { computed, watchEffect } from 'vue';
@@ -33,6 +56,7 @@ import { vaultsService } from '../services/VaultsService';
 export default {
 setup() {
   const route = useRoute({});
+  const router = useRouter({})
 
   watchEffect(() => {
     getProfileById();
@@ -69,7 +93,7 @@ setup() {
   return {
     profile: computed(() => AppState.activeProfile),
     keeps: computed(() => AppState.keeps),
-    vaults: computed(() => AppState.vaults)
+    vaults: computed(() => AppState.vaults),
   };
 },
 };
@@ -77,6 +101,25 @@ setup() {
 
 
 <style>
+
+.absoluteImg{
+  position: absolute;
+  bottom: 10px;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.393);
+}
+.locker{
+  position: absolute;
+  left: 5px;
+  z-index: 2;
+}
+
+.imgBack{
+  width: 15vh;
+  height: 15vh;
+  border-radius: 20px;
+  z-index: 1;
+}
 
 .profile-pic{
   width: 10vh;
@@ -99,6 +142,22 @@ setup() {
   width: 90vw;
   height: 20vh;
  }
+
+ .imgBack{
+  width: 12vh;
+  height: 12vh;
+  border-radius: 20px;
+  z-index: 1;
+ }
+
+ .locker{
+  position: absolute;
+  left: 5px;
+  z-index: 2;
+}
+
+
+
 }
 
 </style>
