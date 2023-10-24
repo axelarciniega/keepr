@@ -56,10 +56,8 @@
                                     </select>
                                 </div>
                                 <div>
-                        <router-link :to="{name: 'Profile', params: {profileId: keep.creatorId}}">
 
-                                    <img class="profile-pic" :src="activeKeep.creator.picture" alt="">
-                        </router-link>
+                                    <img @click="goToAccount" class="profile-pic selectable" :src="activeKeep.creator.picture" alt="">
 
                                 </div>
 
@@ -88,10 +86,13 @@ import { AppState } from '../AppState';
 import Pop from '../utils/Pop';
 import { keepsService } from '../services/KeepsService';
 import { logger } from '../utils/Logger';
+import { useRouter } from 'vue-router';
+import { Modal } from 'bootstrap';
 
 export default {
     props: {keep: {type: Keep, required: true}},
 setup(props) {
+    const router = useRouter({})
   return {
     keepss: computed(()=> AppState.keeps),
     activeKeep: computed(()=> AppState.activeKeep),
@@ -102,6 +103,14 @@ setup(props) {
             await keepsService.getKeepDetails(keepId)
         } catch (error) {
             Pop.error(error)
+        }
+    },
+    async goToAccount(){
+        try {
+            router.push({name: 'Profile', params: {profileId: AppState.activeKeep.creatorId}})
+            Modal.getOrCreateInstance('#DetailModal').hide();
+        } catch (error) {
+            Pop.error(error);
         }
     }
   };
