@@ -17,68 +17,7 @@
 
 
         <!-- STUB modal -->
-        <div class="modal fade" id="DetailModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div  class="modal-dialog modal-lg">
-            <div v-if="activeKeep" class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">{{ activeKeep.name }}</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <section class="row">
-                    <div class="col-12 col-md-6">
-                        <img class="activeImage" :src="activeKeep.img" alt="">
-                    </div>
-                    <div class="col-12 col-md-6 d-flex justify-content-between">
-                        <div class="row">
-                            <div class="col-6">
-                                <i class="mdi mdi-eye"></i> {{ activeKeep.views }}
-                            </div>
-                            <div class="col-6">
-                                <i class="mdi mdi-alpha-k-box"></i> {{ activeKeep.kept }}
-                            </div>
-                            <div class="row">
-                                <div>
-                                    <h1 class="text-center">{{ activeKeep.name }}</h1>
-                                </div>
-                                <div>
-                                    <p class="text-center">{{ activeKeep.description }}</p>
-                                </div>
-                            </div>
-                            <div  class="row">
-                                <form v-if="account.id" @submit.prevent="createVaultKeep(vaultId)">
-                                <div class="col-6">
-                                    <select required v-model="formData.vaultId" name="vault-picker" id="vault-picker" class="form-control">
-                                        <option value="" disabled selected>select a vault</option>
-                                        <option v-for="vault in vaults" :key="'select-'+vault.id" :value="vault.id">{{ vault.name }}</option>
-                                    </select>
-                                </div>
-                                <div  class="col-6">
-                                    <button>Save to vault</button>
-                                </div>
-                            </form>
-
-                                <div>
-                                    <button @click="removeVaultKeep(activeKeep.vaultKeepId)">Remove From vault</button>
-                            </div>
-                                <div>
-                                    <img @click="goToAccount" class="profile-pic selectable" :src="activeKeep.creatorPic" alt="">
-                                    <div class="pt-2" v-if="account.id == activeKeep.creatorId">
-                                        <button @click="removeKeep(activeKeep.id)">Remove Keep</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-            </div>
-            <!-- <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button  type="button" class="btn btn-primary">Save changes</button>
-            </div> -->
-            </div>
-        </div>
-        </div>
+  
 
 
 
@@ -116,9 +55,7 @@ setup(props) {
 
     
 
-    function resetForm(){
-        formData.value = {vaultId: ''}
-    }
+  
 
     async function getMyVaults(){
         try {
@@ -144,64 +81,21 @@ setup(props) {
     account: computed(() => AppState.account),
     activeVault: computed(() => AppState.activeVault),
     // selectedVault: computed (()=> AppState.myVaults.find(v => v.id == formData.value.vaultId)),
+   
 
-    async createVaultKeep(){
-        try {
-            const keepId = AppState.activeKeep.id
-            formData.value.keepId = keepId
-            await vaultKeepsService.createVaultKeep(formData.value)
-            AppState.activeKeep.kept++
-            Pop.success('Saved')
-            resetForm();
-        } catch (error) {
-            Pop.error(error);
-        }
-    },
-
-    async removeVaultKeep(vaultKeepId){
-        try {
-            if(await Pop.confirm()){
-                await vaultKeepsService.removeVaultKeep(vaultKeepId)
-                Modal.getOrCreateInstance('#DetailModal').hide();
-            }
-        } catch (error) {
-            Pop.error(error)
-        }
-    },
-
+    // STAYS
     async getKeepDetails(){
         try {
             logger.log('active keep to be', props.keep)
             logger.log(props.keep.id)
-            const keepId = props.keep.id
             const keep = props.keep
 
             await keepsService.getKeepDetails(keep)
+            AppState.activeKeep.views++
         } catch (error) {
             Pop.error(error)
         }
     },
-
-    async removeKeep(keepId){
-        try {
-            if(await Pop.confirm()){
-                await keepsService.removeKeep(keepId)
-                Pop.success('Deleted Keep')
-                Modal.getOrCreateInstance('#DetailModal').hide();
-            }
-        } catch (error) {
-            Pop.error(error);
-        }
-    },
-
-    async goToAccount(){
-        try {
-            router.push({name: 'Profile', params: {profileId: AppState.activeKeep.creatorId}})
-            Modal.getOrCreateInstance('#DetailModal').hide();
-        } catch (error) {
-            Pop.error(error);
-        }
-    }
   };
 },
 };

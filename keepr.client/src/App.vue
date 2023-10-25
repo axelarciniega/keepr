@@ -8,6 +8,8 @@
    <footer class="bg-dark text-light">
     
   </footer>
+  <KeepDetailsModal/>
+
 </template>
 
 <script>
