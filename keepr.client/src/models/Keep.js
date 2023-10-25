@@ -11,5 +11,7 @@ export class Keep{
         this.kept = data.kept
         this.creator = data.creator
         this.creatorPic = data.creator.picture
+
+        this.vaultKeepId = data.vaultKeepId
     }
 }

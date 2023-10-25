@@ -18,10 +18,11 @@ class KeepsService{
         AppState.keeps = res.data.map(k => new Keep(k))
     }
 
-    async getKeepDetails(keepId){
-        const res = await api.get(`api/keeps/${keepId}`)
+    async getKeepDetails(keep){
+        // TODO pass whole object here instead of id
+        const res = await api.get(`api/keeps/${keep.id}`)
         logger.log('getting keep by Id', res.data)
-        AppState.activeKeep = new Keep(res.data)
+        AppState.activeKeep = keep
     }
 
     async getKeepsByVaultId(vaultId){

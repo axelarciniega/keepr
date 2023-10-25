@@ -21,15 +21,15 @@
                 <router-link :to="{name: 'Vault', params: {vaultId: v.id}}">
                   <div class="position-relative">
                     <img class="imgBack" :src="v.img" alt="">
-                    <i v-if="v.isPrivate == true" class="mdi mdi-lock locker"></i>
+                    <i v-if="v.isPrivate" class="mdi mdi-lock locker"></i>
                     <p class="absoluteImg">{{ v.name }}</p>
                   </div>
                 </router-link>
             </div>
           </section>
 
-          <section class="masonry-container">
-            <h3>Keeps</h3>
+          <section class="masonry-container mt-5">
+            <h3>Keeps</h3> 
             <div class="" v-for="k in keeps" :key="k.id">
               <KeepCard :keep="k"/>
             </div>

@@ -9,7 +9,7 @@
                     <div class="justify-content-between d-flex keep-details">
 
                         <p class=" col-5 col-md-5 absolute text-center m-3">{{ keep.name }}</p>
-                            <img class="profile-pic col-12 col-md-4" :src="keep.creator.picture" :alt="keep.creator.name">
+                            <img :title="keep.creator.name" class="profile-pic col-12 col-md-4" :src="keep.creator.picture" :alt="keep.creator.name">
                     </div>
                 <!-- </div> -->
             </div>
@@ -57,16 +57,16 @@
                                     <button>Save to vault</button>
                                 </div>
                             </form>
-                            <div v-if="activeKeep.vaultKeepId == activeKeep.vaultId">
-                                <button @click="removeVaultKeep(activeKeep.vaultKeepId)">Remove From vault</button>
+
+                                <div>
+                                    <button @click="removeVaultKeep(activeKeep.vaultKeepId)">Remove From vault</button>
                             </div>
-                                <div >
+                                <div>
                                     <img @click="goToAccount" class="profile-pic selectable" :src="activeKeep.creatorPic" alt="">
                                     <div class="pt-2" v-if="account.id == activeKeep.creatorId">
                                         <button @click="removeKeep(activeKeep.id)">Remove Keep</button>
                                     </div>
                                 </div>
-
                             </div>
                         </div>
                     </div>
@@ -158,11 +158,11 @@ setup(props) {
         }
     },
 
-    async removeVaultKeep(keepId){
+    async removeVaultKeep(vaultKeepId){
         try {
             if(await Pop.confirm()){
-                await vaultKeepsService.removeVaultKeep(keepId)
-                // Modal.getOrCreateInstance('#DetailModal').hide();
+                await vaultKeepsService.removeVaultKeep(vaultKeepId)
+                Modal.getOrCreateInstance('#DetailModal').hide();
             }
         } catch (error) {
             Pop.error(error)
@@ -171,9 +171,12 @@ setup(props) {
 
     async getKeepDetails(){
         try {
+            logger.log('active keep to be', props.keep)
             logger.log(props.keep.id)
             const keepId = props.keep.id
-            await keepsService.getKeepDetails(keepId)
+            const keep = props.keep
+
+            await keepsService.getKeepDetails(keep)
         } catch (error) {
             Pop.error(error)
         }
@@ -183,8 +186,8 @@ setup(props) {
         try {
             if(await Pop.confirm()){
                 await keepsService.removeKeep(keepId)
-                Modal.getOrCreateInstance('#DetailModal').hide();
                 Pop.success('Deleted Keep')
+                Modal.getOrCreateInstance('#DetailModal').hide();
             }
         } catch (error) {
             Pop.error(error);

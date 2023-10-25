@@ -7,15 +7,15 @@
       </div>
     </router-link>
 
-      <button class="navbar-toggle m-1" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText"
+      <!-- <button  class="navbar-toggle m-1" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText"
       aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
-    </button>
+    </button> -->
     <div class="collapse navbar-collapse m-2" id="navbarText">
-      <button type="button" class="btn btn-secondary m-4" data-bs-toggle="modal" data-bs-target="#KeepModal">
+      <button v-show="account.id" b- type="button" class="btn btn-secondary m-4" data-bs-toggle="modal" data-bs-target="#KeepModal">
         Create Keep
       </button>  
-      <button type="button" class="btn btn-secondary m-4" data-bs-toggle="modal" data-bs-target="#VaultModal">
+      <button v-show="account.id" type="button" class="btn btn-secondary m-4" data-bs-toggle="modal" data-bs-target="#VaultModal">
         Create Vault
       </button>
 
@@ -78,10 +78,15 @@
 </template>
 
 <script>
+import { AppState } from '../AppState';
+import { computed, onMounted, onUnmounted } from 'vue';
+
 import Login from './Login.vue';
 export default {
   setup() {
-    return {}
+    return {
+      account: computed(() => AppState.account),
+    }
   },
   components: { Login }
 }

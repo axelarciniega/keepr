@@ -16,7 +16,7 @@
                 <button @click="removeVault(activeVault.id)">Delete Vault <i class="mdi mdi-trash-can"></i></button>
             </div>
 
-            <section class="masonry-container">
+            <section class="masonry-container mt-5">
                 <div class="" v-for="k in keeps" :key="k.id">
                     <KeepCard :keep="k"/>
                 </div>

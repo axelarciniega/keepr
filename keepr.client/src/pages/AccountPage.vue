@@ -36,9 +36,12 @@ import { computed, ref, watchEffect } from 'vue';
 import { AppState } from '../AppState';
 import Pop from '../utils/Pop';
 import { accountService } from '../services/AccountService';
+import { useRoute, useRouter } from 'vue-router';
+
 export default {
   setup() {
     const editable = ref({})
+    const router = useRouter()
     watchEffect(() => {
       editable.value = AppState.account;
     });
@@ -50,6 +53,7 @@ export default {
         try {
           await accountService.editAccount(editable.value);
           Pop.success('Changes Saved');
+            router.push({name:'Profile', params: {profileId: AppState.account.id}})
         } catch (error) {
           Pop.error(error);
         }
