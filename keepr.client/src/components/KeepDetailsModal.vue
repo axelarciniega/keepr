@@ -45,7 +45,8 @@
                             </div>
                                 <div>
                                     <img @click="goToAccount" class="profile-pic selectable" :src="activeKeep.creatorPic" alt="">
-                                    <div class="pt-2" v-if="account.id == activeKeep.creatorId">
+                                    <p>{{ activeKeep.creator.name }}</p>
+                                    <div class="pt-3" v-if="account.id == activeKeep.creatorId">
                                         <button @click="removeKeep(activeKeep.id)">Remove Keep</button>
                                     </div>
                                 </div>
