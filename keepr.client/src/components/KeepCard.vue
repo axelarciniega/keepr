@@ -46,15 +46,17 @@
                                 </div>
                             </div>
                             <div class="row">
+                                <form @submit.prevent="createVaultKeep()">
                                 <div class="col-6">
-                                    <button>Save to vault</button>
-                                </div>
-                                <div class="col-6">
-                                    <select name="vault-picker" id="vault-picker" class="form-control">
+                                    <select v-model="formData.vaultId" name="vault-picker" id="vault-picker" class="form-control">
                                         <option value="" disabled selected>select a vault</option>
-                                        <option v-for="keep in keepss" :key="keep.id" select="+keepss.id" value="keepss.id">{{ keep.name }}</option>
+                                        <option v-for="vault in vaults" :key="'select-'+vault.id" :value="vault.id">{{ vault.name }}</option>
                                     </select>
                                 </div>
+                                <div  class="col-6">
+                                    <button>Save to vault</button>
+                                </div>
+                            </form>
                                 <div >
                                     <img @click="goToAccount" class="profile-pic selectable" :src="activeKeep.creatorPic" alt="">
                                     <div class="pt-2" v-if="account.id == activeKeep.creatorId">
@@ -81,7 +83,7 @@
     </template>
 
 <script>
-import { computed } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { Keep } from '../models/Keep';
 import { AppState } from '../AppState';
 import Pop from '../utils/Pop';
@@ -89,16 +91,53 @@ import { keepsService } from '../services/KeepsService';
 import { logger } from '../utils/Logger';
 import { useRoute, useRouter } from 'vue-router';
 import { Modal } from 'bootstrap';
+import { vaultsService } from '../services/VaultsService';
+import { vaultKeepsService } from '../services/VaultKeepsService';
 
 export default {
     props: {keep: {type: Keep, required: true}},
 setup(props) {
     const router = useRouter({})
     const route = useRoute({})
+    const formData = ref({})
+
+    onMounted(() => {
+        getMyVaults();
+
+    })
+
+    
+
+    function resetForm(){
+        formData.value = {vaultId: ''}
+    }
+
+    async function getMyVaults(){
+        try {
+            await vaultsService.getMyVaults()
+        } catch (error) {
+            Pop.error(error);
+        }
+    }
   return {
+    formData,
+    vaults: computed(() => AppState.myVaults),
     keepss: computed(()=> AppState.keeps),
     activeKeep: computed(()=> AppState.activeKeep),
     account: computed(() => AppState.account),
+    // selectedVault: computed (()=> AppState.myVaults.find(v => v.id == formData.value.vaultId)),
+
+    async createVaultKeep(){
+        try {
+            debugger
+            await vaultKeepsService.createVaultKeep(formData.value)
+            Pop.success('Saved')
+            resetForm();
+        } catch (error) {
+            Pop.error(error);
+        }
+    },
+
     async getKeepDetails(){
         try {
             logger.log(props.keep.id)
@@ -149,7 +188,7 @@ setup(props) {
         border-radius: px;
         backdrop-filter: blur(20px);
         color:white;
-        max-height: 30px;
+        max-height: 80px;
     }
 
   

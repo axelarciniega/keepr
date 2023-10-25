@@ -11,15 +11,16 @@ class VaultsService{
         AppState.vaults.unshift(new Vault(res.data))
     }
 
+
     async vaultDetails(vaultId){
         const res = await api.get(`api/vaults/${vaultId}`)
         logger.log(res.data, 'getting vault by Id')
         AppState.activeVault = new Vault(res.data)
     }
 
-    async getMyVaults(profileId){
-        const res = await api.get(`api/accounts/vaults/${profileId}`)
-        AppState.vaults = res.data.map(v => new Vault(v))
+    async getMyVaults(){
+        const res = await api.get('account/vaults')
+        AppState.myVaults = res.data.map(v => new Vault(v))
     }
 
     async vaultProfile(profileId){
