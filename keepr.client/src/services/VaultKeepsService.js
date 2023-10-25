@@ -1,3 +1,4 @@
+import { AppState } from "../AppState"
 import { logger } from "../utils/Logger"
 import { api } from "./AxiosService"
 
@@ -9,6 +10,14 @@ class VaultKeepsService{
         logger.log(res.data, 'created vault keep')
     }
 
+    async removeVaultKeep(vaultKeepId){
+        const res = await api.delete(`api/vaultKeeps/${vaultKeepId}`)
+        logger.log(res.data, 'deleting vaultKeep')
+        const findIndex = AppState.keeps.findIndex(k => k.vaultKeepId == vaultKeepId)
+        AppState.keeps.splice(findIndex, 1)
+        AppState.activeKeep = {}
+
+    }
 
 
 }

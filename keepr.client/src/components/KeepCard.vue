@@ -4,12 +4,12 @@
         <!-- <section class="row"> -->
             <div @click="getKeepDetails()" class="position-relative" data-bs-toggle="modal" data-bs-target="#DetailModal">
                 <!-- <div class="img-s" :style="`background-image: url(${keep.img})`"> -->
-                    <img class="img-s" :src="keep.img" alt="">
+                    <img class="img-s" :src="keep.img" :alt="keep.name">
                     <!-- <img class="img-s" :src="keep.img"> -->
                     <div class="justify-content-between d-flex keep-details">
 
                         <p class=" col-5 col-md-5 absolute text-center m-3">{{ keep.name }}</p>
-                            <img class="profile-pic col-12 col-md-4" :src="keep.creator.picture" alt="">
+                            <img class="profile-pic col-12 col-md-4" :src="keep.creator.picture" :alt="keep.creator.name">
                     </div>
                 <!-- </div> -->
             </div>
@@ -56,6 +56,9 @@
                                 <div  class="col-6">
                                     <button>Save to vault</button>
                                 </div>
+                                <!-- <div v-if="activeVault.id && account.id == activeVault.creator.id">
+                                <button @click="removeVaultKeep(activeKeep.vaultKeepId)">Remove From vault</button>
+                                </div> -->
                             </form>
                                 <div >
                                     <img @click="goToAccount" class="profile-pic selectable" :src="activeKeep.creatorPic" alt="">
@@ -92,7 +95,7 @@ import { logger } from '../utils/Logger';
 import { useRoute, useRouter } from 'vue-router';
 import { Modal } from 'bootstrap';
 import { vaultsService } from '../services/VaultsService';
-import { vaultKeepsService } from '../services/VaultKeepsService';
+import { vaultKeepsService } from '../services/VaultKeepsService.js';
 
 export default {
     props: {keep: {type: Keep, required: true}},
@@ -125,16 +128,27 @@ setup(props) {
     keepss: computed(()=> AppState.keeps),
     activeKeep: computed(()=> AppState.activeKeep),
     account: computed(() => AppState.account),
+    activeVault: computed(() => AppState.activeVault),
     // selectedVault: computed (()=> AppState.myVaults.find(v => v.id == formData.value.vaultId)),
 
     async createVaultKeep(){
         try {
-            debugger
             await vaultKeepsService.createVaultKeep(formData.value)
             Pop.success('Saved')
             resetForm();
         } catch (error) {
             Pop.error(error);
+        }
+    },
+
+    async removeVaultKeep(vaultKeepId){
+        try {
+            if(await Pop.confirm()){
+                await vaultKeepsService.removeVaultKeep(vaultKeepId)
+                Modal.getOrCreateInstance('#DetailModal').hide();
+            }
+        } catch (error) {
+            Pop.error(error)
         }
     },
 
