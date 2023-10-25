@@ -18,7 +18,7 @@
 
         <!-- STUB modal -->
         <div class="modal fade" id="DetailModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div  class="modal-dialog modal-xl">
+        <div  class="modal-dialog modal-lg">
             <div v-if="activeKeep" class="modal-content">
             <div class="modal-header">
                 <h1 class="modal-title fs-5" id="exampleModalLabel">{{ activeKeep.name }}</h1>
@@ -45,10 +45,10 @@
                                     <p class="text-center">{{ activeKeep.description }}</p>
                                 </div>
                             </div>
-                            <div class="row">
-                                <form @submit.prevent="createVaultKeep()">
+                            <div  class="row">
+                                <form v-if="account.id" @submit.prevent="createVaultKeep(vaultId)">
                                 <div class="col-6">
-                                    <select v-model="formData.vaultId" name="vault-picker" id="vault-picker" class="form-control">
+                                    <select required v-model="formData.vaultId" name="vault-picker" id="vault-picker" class="form-control">
                                         <option value="" disabled selected>select a vault</option>
                                         <option v-for="vault in vaults" :key="'select-'+vault.id" :value="vault.id">{{ vault.name }}</option>
                                     </select>
@@ -56,10 +56,10 @@
                                 <div  class="col-6">
                                     <button>Save to vault</button>
                                 </div>
-                                <!-- <div v-if="activeVault.id && account.id == activeVault.creator.id">
-                                <button @click="removeVaultKeep(activeKeep.vaultKeepId)">Remove From vault</button>
-                                </div> -->
                             </form>
+                            <div v-if="activeKeep.vaultKeepId == activeKeep.vaultId">
+                                <button @click="removeVaultKeep(activeKeep.vaultKeepId)">Remove From vault</button>
+                            </div>
                                 <div >
                                     <img @click="goToAccount" class="profile-pic selectable" :src="activeKeep.creatorPic" alt="">
                                     <div class="pt-2" v-if="account.id == activeKeep.creatorId">
@@ -86,7 +86,7 @@
     </template>
 
 <script>
-import { computed, onMounted, ref } from 'vue';
+import { computed, onMounted, ref, onUnmounted } from 'vue';
 import { Keep } from '../models/Keep';
 import { AppState } from '../AppState';
 import Pop from '../utils/Pop';
@@ -96,6 +96,7 @@ import { useRoute, useRouter } from 'vue-router';
 import { Modal } from 'bootstrap';
 import { vaultsService } from '../services/VaultsService';
 import { vaultKeepsService } from '../services/VaultKeepsService.js';
+import { clearService } from '../services/ClearService';
 
 export default {
     props: {keep: {type: Keep, required: true}},
@@ -107,6 +108,10 @@ setup(props) {
     onMounted(() => {
         getMyVaults();
 
+    })
+
+    onUnmounted(()=> {
+        clearAppstate();
     })
 
     
@@ -122,6 +127,15 @@ setup(props) {
             Pop.error(error);
         }
     }
+
+    function clearAppstate(){
+        try {
+            clearService.clearAppstate()
+        } catch (error) {
+            Pop.error(error);
+        }
+    }
+
   return {
     formData,
     vaults: computed(() => AppState.myVaults),
@@ -133,7 +147,10 @@ setup(props) {
 
     async createVaultKeep(){
         try {
+            const keepId = AppState.activeKeep.id
+            formData.value.keepId = keepId
             await vaultKeepsService.createVaultKeep(formData.value)
+            AppState.activeKeep.kept++
             Pop.success('Saved')
             resetForm();
         } catch (error) {
@@ -141,11 +158,11 @@ setup(props) {
         }
     },
 
-    async removeVaultKeep(vaultKeepId){
+    async removeVaultKeep(keepId){
         try {
             if(await Pop.confirm()){
-                await vaultKeepsService.removeVaultKeep(vaultKeepId)
-                Modal.getOrCreateInstance('#DetailModal').hide();
+                await vaultKeepsService.removeVaultKeep(keepId)
+                // Modal.getOrCreateInstance('#DetailModal').hide();
             }
         } catch (error) {
             Pop.error(error)
@@ -167,8 +184,8 @@ setup(props) {
             if(await Pop.confirm()){
                 await keepsService.removeKeep(keepId)
                 Modal.getOrCreateInstance('#DetailModal').hide();
+                Pop.success('Deleted Keep')
             }
-            Pop.success('Deleted Keep')
         } catch (error) {
             Pop.error(error);
         }
@@ -202,7 +219,7 @@ setup(props) {
         border-radius: px;
         backdrop-filter: blur(20px);
         color:white;
-        max-height: 80px;
+        max-height: 40px;
     }
 
   

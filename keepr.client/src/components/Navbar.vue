@@ -12,10 +12,10 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse m-2" id="navbarText">
-      <button type="button" class="btn btn-primary m-4" data-bs-toggle="modal" data-bs-target="#KeepModal">
+      <button type="button" class="btn btn-secondary m-4" data-bs-toggle="modal" data-bs-target="#KeepModal">
         Create Keep
       </button>  
-      <button type="button" class="btn btn-primary m-4" data-bs-toggle="modal" data-bs-target="#VaultModal">
+      <button type="button" class="btn btn-secondary m-4" data-bs-toggle="modal" data-bs-target="#VaultModal">
         Create Vault
       </button>
 

@@ -4,17 +4,17 @@
             <form @submit.prevent="createKeep">
                 <div class="col-6">
                     <label for="Name">Name</label>
-                    <input v-model="keepData.name" maxlength="40" type="text" class="form-control">
+                    <input required v-model="keepData.name" maxlength="40" type="text" class="form-control">
                 </div>
 
                 <div class="col-6">
                     <label for="Description">Description</label>
-                    <textarea v-model="keepData.description" maxlength="500" id="description" rows="5" class="form-control"></textarea>
+                    <textarea required v-model="keepData.description" maxlength="500" id="description" rows="5" class="form-control"></textarea>
                 </div>
 
                 <div class="col-6">
                     <label for="Image">Image</label>
-                    <input v-model="keepData.img" maxlenth="500" type="text" class="form-control">
+                    <input required v-model="keepData.img" maxlenth="500" type="text" class="form-control">
                 </div>
 
                 <div class="text-center pt-4">

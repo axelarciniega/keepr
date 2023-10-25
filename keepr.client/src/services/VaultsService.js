@@ -8,7 +8,8 @@ class VaultsService{
 
     async createVault(vaultData){
         const res = await api.post('api/vaults', vaultData)
-        AppState.vaults.unshift(new Vault(res.data))
+        AppState.activeVault = new Vault(res.data)
+        return AppState.activeVault
     }
 
 
@@ -31,8 +32,8 @@ class VaultsService{
     async removeVault(vaultId){
         const res = await api.delete(`api/vaults/${vaultId}`)
         logger.log(res.data, 'deleting vault')
-        const findIndex = AppState.vaults.findIndex(v => v.id == vaultId)
-        AppState.vaults.splice(findIndex, 1)
+        const vaultIndex = AppState.vaults.findIndex(v => v.id == vaultId)
+        AppState.vaults.splice(vaultIndex, 1)
         AppState.activeVault = {}
     }
 

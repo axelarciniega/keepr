@@ -4,7 +4,7 @@
             <section class="row">
                 <div class="mt-4 text-center position-relative">
                     <img class="backgroundImg" :src="activeVault.img" :alt="activeVault.name">
-                    <h1 class=""> By {{ activeVault.creator.name }}</h1>
+                    <h1 class=""> By {{ activeVault.creator?.name }}</h1>
                 </div> 
             </section>
             
@@ -12,8 +12,12 @@
                 <i> {{ keeps.length }} keeps</i>
             </div>
 
+            <div v-if="account.id == activeVault.creatorId" class="text-center">
+                <button @click="removeVault(activeVault.id)">Delete Vault <i class="mdi mdi-trash-can"></i></button>
+            </div>
+
             <section class="masonry-container">
-                <div class="col-3 col-md-4 m-1" v-for="k in keeps" :key="k.id">
+                <div class="" v-for="k in keeps" :key="k.id">
                     <KeepCard :keep="k"/>
                 </div>
             </section>
@@ -23,12 +27,13 @@
 </template>
 
 <script>
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import Pop from '../utils/Pop';
 import { vaultsService } from '../services/VaultsService';
 import { computed, onMounted, onUnmounted } from 'vue';
 import { AppState } from '../AppState';
 import { keepsService } from '../services/KeepsService';
+import { clearService } from '../services/ClearService';
 
 export default {
     
@@ -39,10 +44,11 @@ setup() {
     })
 
     onUnmounted(()=> {
-        
+        clearAppstate();
     })
 
     const route = useRoute({});
+    const router = useRouter({})
 
     async function getKeepsByVaultId(){
         try {
@@ -61,9 +67,30 @@ setup() {
             Pop.error(error)
         }
     }
+
+    function clearAppstate(){
+        try {
+            clearService.clearVaultAppstate()
+        } catch (error) {
+            Pop.error(error);
+        }
+    }
   return {
     activeVault: computed(()=> AppState.activeVault),
-    keeps: computed(()=> AppState.keeps)
+    keeps: computed(()=> AppState.keeps),
+    account: computed(() => AppState.account),
+
+    async removeVault(activeVaultId){
+        try {
+            if(await Pop.confirm()){
+                vaultsService.removeVault(activeVaultId)
+                Pop.success('Delete Vault')
+                router.push({name: 'Home'})
+            }
+        } catch (error) {
+            Pop.error(error);
+        }
+    }
   };
 },
 };

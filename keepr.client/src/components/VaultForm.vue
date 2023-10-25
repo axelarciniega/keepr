@@ -5,17 +5,17 @@
 
             <div class="col-6">
                 <label for="Name">Name</label>
-                <input v-model="vaultData.name" maxlength="40" type="text" class="form-control">
+                <input required v-model="vaultData.name" maxlength="40" type="text" class="form-control">
             </div>
 
             <div class="col-6">
                 <label for="description">Description</label>
-                <textarea v-model="vaultData.description" maxlength="500" id="description" rows="6"></textarea>
+                <textarea required v-model="vaultData.description" maxlength="500" id="description" rows="6"></textarea>
             </div>
 
             <div class="col-6">
                 <label for="image">Image</label>
-                <input v-model="vaultData.img" maxlength="500" type="text" class="form-control">
+                <input required v-model="vaultData.img" maxlength="500" type="text" class="form-control">
             </div>
 
             <div class="col-4 pt-3">
