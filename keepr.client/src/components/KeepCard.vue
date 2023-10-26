@@ -25,7 +25,7 @@
     </template>
 
 <script>
-import { computed, onMounted, ref, onUnmounted } from 'vue';
+import { computed, onMounted, ref, onUnmounted, watchEffect } from 'vue';
 import { Keep } from '../models/Keep';
 import { AppState } from '../AppState';
 import Pop from '../utils/Pop';
@@ -44,7 +44,7 @@ setup(props) {
     const route = useRoute({})
     const formData = ref({})
 
-    onMounted(() => {
+    watchEffect(() => {
         getMyVaults();
 
     })
@@ -75,7 +75,6 @@ setup(props) {
 
   return {
     formData,
-    vaults: computed(() => AppState.myVaults),
     keepss: computed(()=> AppState.keeps),
     activeKeep: computed(()=> AppState.activeKeep),
     account: computed(() => AppState.account),

@@ -100,6 +100,7 @@ namespace keepr.Repositories
             name = @name,
             description = @description,
             img = @img,
+            kept = @kept,
             views = @views
             WHERE id = @id;
             ;";

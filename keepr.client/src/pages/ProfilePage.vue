@@ -18,7 +18,7 @@
           <section class="row mt-4">
             <h3>Vaults</h3>
             <div class="col-3 col-md-2 m-1 " v-for="v in vaults" :key="v.id">
-                <router-link :to="{name: 'Vault', params: {vaultId: v.id}}">
+                <router-link :to="v.isPrivate && !v.creatorId == profile.id ? {name: 'Home'} : {name: 'Vault', params: {vaultId: v.id}}">
                   <div class="position-relative">
                     <img class="imgBack" :src="v.img" alt="">
                     <i v-if="v.isPrivate" class="mdi mdi-lock locker"></i>

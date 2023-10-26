@@ -9,14 +9,18 @@ namespace keepr.Services
     {
         private readonly VaultKeepsRepository _repo;
         private readonly VaultsService _vaultsService;
+        private readonly KeepsService _keepsService;
+        private readonly KeepsRepository _repoKeep;
 
-        public VaultKeepsService(VaultKeepsRepository repo, VaultsService vaultsService)
+        public VaultKeepsService(VaultKeepsRepository repo, VaultsService vaultsService, KeepsService keepsService, KeepsRepository repoKeep)
         {
             _repo = repo;
             _vaultsService = vaultsService;
+            _keepsService = keepsService;
+            _repoKeep = repoKeep;
         }
 
-        internal VaultKeep Create(VaultKeep vaultData)
+        internal VaultKeep Create(VaultKeep vaultData, bool increaseKepts = false)
         {
 
             VaultKeep newVaultKeep = _repo.Create(vaultData);
@@ -25,7 +29,11 @@ namespace keepr.Services
 
             if (vault.CreatorId != vaultData.CreatorId) throw new Exception("Unauthorized");
 
-
+            Keep foundKeep = _keepsService.GetById(vaultData.KeepId, vaultData.CreatorId);
+            if (foundKeep.CreatorId == newVaultKeep.CreatorId)
+            {
+                this.IncreaseKepts(foundKeep);
+            };
 
             return newVaultKeep;
         }
@@ -51,5 +59,12 @@ namespace keepr.Services
             if (foundVaultKeep.CreatorId != userInfo) throw new Exception("Unauthorized");
             return $"{foundVaultKeep.Id} was removed";
         }
+
+        internal void IncreaseKepts(Keep keep)
+        {
+            keep.Kept++;
+            _repoKeep.Update(keep);
+        }
+
     }
 }

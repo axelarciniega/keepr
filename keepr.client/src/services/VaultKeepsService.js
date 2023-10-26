@@ -1,4 +1,5 @@
 import { AppState } from "../AppState"
+import { Keep } from "../models/Keep"
 import { logger } from "../utils/Logger"
 import { api } from "./AxiosService"
 
@@ -8,6 +9,7 @@ class VaultKeepsService{
     async createVaultKeep(formData){
         const res = await api.post('api/vaultKeeps', formData)
         logger.log(res.data, 'created vault keep')
+        AppState.keeps = new Keep(res.data)
     }
 
     async removeVaultKeep(vaultKeepId){

@@ -78,6 +78,8 @@ export default {
     
 setup() {
 
+    
+
     const router = useRouter({})
     const route = useRoute({})
     const formData = ref({})
@@ -105,6 +107,7 @@ setup() {
             Pop.error(error);
         }
     },
+    
     async removeVaultKeep(vaultKeepId){
         try {
             if(await Pop.confirm()){
