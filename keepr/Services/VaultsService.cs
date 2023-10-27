@@ -62,8 +62,8 @@ namespace keepr.Services
         internal string DeleteVault(int vaultId, string userInfo)
         {
             Vault foundVault = this.GetById(vaultId, userInfo);
-            _repo.DeleteVault(vaultId);
             if (foundVault.CreatorId != userInfo) throw new Exception("Unauthorized");
+            _repo.DeleteVault(vaultId);
             return $"{foundVault.Name} was removed";
 
         }

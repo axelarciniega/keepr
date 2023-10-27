@@ -11,17 +11,7 @@
                         <p class=" col-5 col-md-5 absolute text-center m-3">{{ keep.name }}</p>
                             <img :title="keep.creator.name" class="profile-pic col-12 col-md-4" :src="keep.creator.picture" :alt="keep.creator.name">
                     </div>
-                <!-- </div> -->
             </div>
-        <!-- </section> -->
-
-
-        <!-- STUB modal -->
-  
-
-
-
-    <!-- </div> -->
     </template>
 
 <script>
@@ -44,26 +34,11 @@ setup(props) {
     const route = useRoute({})
     const formData = ref({})
 
-    watchEffect(() => {
-        getMyVaults();
-
-    })
-
     onUnmounted(()=> {
         clearAppstate();
     })
 
-    
 
-  
-
-    async function getMyVaults(){
-        try {
-            await vaultsService.getMyVaults()
-        } catch (error) {
-            Pop.error(error);
-        }
-    }
 
     function clearAppstate(){
         try {
@@ -79,6 +54,7 @@ setup(props) {
     activeKeep: computed(()=> AppState.activeKeep),
     account: computed(() => AppState.account),
     activeVault: computed(() => AppState.activeVault),
+    keepCoverImg: computed(() => `url(${props.keep.img})`),
     // selectedVault: computed (()=> AppState.myVaults.find(v => v.id == formData.value.vaultId)),
    
 
@@ -107,6 +83,10 @@ setup(props) {
         width: 100%;
         height: 100%;
         border-radius: 10px;
+    }
+
+    .keep-coverImg {
+        background-image: v-bind(keep-coverImg)
     }
 
    

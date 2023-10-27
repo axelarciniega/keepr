@@ -52,6 +52,7 @@ setup() {
 
     async function getKeepsByVaultId(){
         try {
+            // TODO MAKE SURE IF YOU CATCH AND ERROR, DO SOME SORT OF LOGIC TO SEND THEM BACK TO THE HOME PAGE
             const vaultId = route.params.vaultId
             await keepsService.getKeepsByVaultId(vaultId)
         } catch (error) {

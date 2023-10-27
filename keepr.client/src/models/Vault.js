@@ -8,7 +8,6 @@ export class Vault{
         this.isPrivate = data.isPrivate
         this.creatorId = data.creatorId
         this.creator = data.creator
-
         this.vault = data.vault
     }
 }

@@ -60,8 +60,8 @@ namespace keepr.Services
         internal string DeleteKeep(int keepId, string userInfo)
         {
             Keep foundKeep = this.GetById(keepId, userInfo);
-            _repo.DeleteKeep(keepId);
             if (foundKeep.CreatorId != userInfo) throw new Exception("unauthorized to delete");
+            _repo.DeleteKeep(keepId);
             return $"{foundKeep.Name} was removed";
         }
 

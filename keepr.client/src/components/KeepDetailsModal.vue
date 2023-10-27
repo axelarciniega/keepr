@@ -1,12 +1,12 @@
 <template>
-       <div class="modal fade" id="DetailModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="DetailModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div  class="modal-dialog modal-lg">
-            <div v-if="activeKeep" class="modal-content">
+            <div class="modal-content">
             <div class="modal-header">
                 <h1 class="modal-title fs-5" id="exampleModalLabel">{{ activeKeep.name }}</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
+            <div  v-if="activeKeep" class="modal-body">
                 <section class="row">
                     <div class="col-12 col-md-6">
                         <img class="activeImage" :src="activeKeep.img" alt="">
@@ -24,7 +24,7 @@
                                     <h1 class="text-center">{{ activeKeep.name }}</h1>
                                 </div>
                                 <div>
-                                    <p class="text-center">{{ activeKeep.description }}</p>
+                                    <p class="">{{ activeKeep.description }}</p>
                                 </div>
                             </div>
                             <div  class="row">
@@ -45,7 +45,7 @@
                             </div>
                                 <div>
                                     <img @click="goToAccount" class="profile-pic selectable" :src="activeKeep.creatorPic" alt="">
-                                    <p>{{ activeKeep.creator.name }}</p>
+                                    <p v-if="activeKeep.creator">{{ activeKeep.creator.name }}</p>
                                     <div class="pt-3" v-if="account.id == activeKeep.creatorId">
                                         <button @click="removeKeep(activeKeep.id)">Remove Keep</button>
                                     </div>
