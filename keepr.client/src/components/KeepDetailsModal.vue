@@ -40,7 +40,7 @@
                                 </div>
                             </form>
 
-                            <div>
+                            <div v-if="account.id">
                                     <button @click="removeVaultKeep(activeKeep.vaultKeepId)">Remove From vault</button>
                             </div>
                                 <div>
